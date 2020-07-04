@@ -105,8 +105,13 @@ class RoamingRalphDemo(ShowBase):
         )
         filter_pass.node_path.set_shader_input('render', light_pass.output)
 
+        # Enable FXAA
+        fxaa_pass = lionrender.FxaaFilterPass('fxaa')
+        fxaa_pass.node_path.set_shader_input('inputTexture', filter_pass.output)
+
         # Output result
-        filter_pass.output_to(render2d)
+        fxaa_pass.output_to(render2d)
+        # filter_pass.output_to(render2d)
 
         # This is used to store which keys are currently pressed.
         self.keyMap = {
