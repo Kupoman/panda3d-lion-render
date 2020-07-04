@@ -11,7 +11,17 @@ def get_shader_path(file_name):
 
 
 class FilterPass(Pass):
-    pass
+    def __init__(self, name, frag_path, **pass_options):
+        shader = p3d.Shader.load(
+            p3d.Shader.SL_GLSL,
+            get_shader_path('fsq.vert'),
+            frag_path
+        )
+        filter_options = {
+            'shader': shader
+        }
+        filter_options.update(pass_options)
+        super().__init__(name, **filter_options)
 
 
 class FxaaFilterPass(FilterPass):
@@ -23,16 +33,7 @@ class FxaaFilterPass(FilterPass):
             edge_threshold_min=0.0,
             **pass_options
     ):
-        vert = get_shader_path('fsq.vert')
-        frag = get_shader_path('fxaa.frag')
-        shader = p3d.Shader.load(p3d.Shader.SL_GLSL, vert, frag)
-
-        fxaa_options = {
-            'shader': shader
-        }
-        fxaa_options.update(pass_options)
-
-        super().__init__(name, **fxaa_options)
+        super().__init__(name, get_shader_path('fxaa.frag'), **pass_options)
 
         self.node_path.set_shader_input('subpix', subpixel_aliasing)
         self.node_path.set_shader_input('edgeThreshold', edge_threshold)
