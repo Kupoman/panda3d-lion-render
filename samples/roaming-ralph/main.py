@@ -56,14 +56,7 @@ class RoamingRalphDemo(ShowBase):
         ShowBase.__init__(self)
 
         # Configure depth pre-pass
-        prepass_fb_props = FrameBufferProperties()
-        prepass_fb_props.set_depth_bits(32)
-        prepass_fb_props.set_rgba_bits(0, 0, 0, 0)
-        prepass_pass = lionrender.Pass(
-            'pre-pass',
-            camera=base.camera,
-            scene=base.render,
-            frame_buffer_properties=prepass_fb_props,
+        prepass_pass = lionrender.DepthScenePass(
             shader=Shader.load(Shader.SL_GLSL, 'shaders/model.vert', 'shaders/null.frag'),
         )
 
@@ -73,10 +66,7 @@ class RoamingRalphDemo(ShowBase):
         scene_fb_props.set_aux_rgba(1)
         scene_fb_props.set_rgba_bits(8, 8, 8, 0)
         scene_fb_props.set_depth_bits(32)
-        scene_pass = lionrender.Pass(
-            'scene',
-            camera=base.camera,
-            scene=base.render,
+        scene_pass = lionrender.ScenePass(
             frame_buffer_properties=scene_fb_props,
             shader=Shader.load(Shader.SL_GLSL, 'shaders/model.vert', 'shaders/model.frag'),
             clear_color=LColor(0.53, 0.80, 0.92, 1),
@@ -89,8 +79,7 @@ class RoamingRalphDemo(ShowBase):
         light_fb_props.set_rgb_color(True)
         light_fb_props.set_float_color(True)
         light_fb_props.set_rgba_bits(16, 16, 16, 0)
-        light_pass = lionrender.Pass(
-            'light',
+        light_pass = lionrender.FilterPass(
             camera=base.camera,
             frame_buffer_properties=light_fb_props,
             shader=Shader.load(Shader.SL_GLSL, 'shaders/light.vert', 'shaders/light.frag'),
