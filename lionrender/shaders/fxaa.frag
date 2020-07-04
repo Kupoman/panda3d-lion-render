@@ -1,12 +1,13 @@
 #version 330
 #extension GL_ARB_gpu_shader5 : require
+#extension GL_GOOGLE_include_directive : enable
 
 #define FXAA_PC 1
 #define FXAA_GLSL_130 1
 #define FXAA_QUALITY_PRESET 12
 #define FXAA_GREEN_AS_LUMA 1
 
-#pragma include "fxaa.lib"
+#include "fxaa.lib"
 
 in vec2 texcoord;
 out vec4 outFrag;
