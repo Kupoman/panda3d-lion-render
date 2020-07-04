@@ -12,12 +12,12 @@ in vec2 texcoord;
 out vec4 outFrag;
 
 uniform sampler2D inputTexture;
+uniform float subpix = 0.75;
+uniform float edgeThreshold = 0.166;
+uniform float edgeThresholdMin = 0.0;
 
 void main() {
     vec2 rcpFrame = vec2(1.0) / textureSize(inputTexture, 0);
-    float subpix = 0.75;
-    float edgeThreshold = 0.166;
-    float edgeThresholdMin = 0.0;
 
     outFrag = FxaaPixelShader(
         texcoord,
