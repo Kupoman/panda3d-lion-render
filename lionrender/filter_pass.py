@@ -11,11 +11,19 @@ def get_shader_path(file_name):
 
 
 class FilterPass(Pass):
-    def __init__(self, name, frag_path, **pass_options):
+    def __init__(
+            self,
+            name='filter-pass',
+            fragment_path=None,
+            **pass_options
+    ):
+        if fragment_path is None:
+            raise Exception('No fragment shader is specified with "fragment_path" parameter')
+
         shader = p3d.Shader.load(
             p3d.Shader.SL_GLSL,
             get_shader_path('fsq.vert'),
-            frag_path
+            fragment_path
         )
         filter_options = {
             'shader': shader
@@ -27,7 +35,7 @@ class FilterPass(Pass):
 class FxaaFilterPass(FilterPass):
     def __init__(
             self,
-            name,
+            name='fxaa-filter-pass',
             subpixel_aliasing=0.75,
             edge_threshold=0.166,
             edge_threshold_min=0.0,

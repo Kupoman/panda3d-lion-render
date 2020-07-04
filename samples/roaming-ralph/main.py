@@ -99,11 +99,11 @@ class RoamingRalphDemo(ShowBase):
         light_pass.node_path.set_shader_input('normal_texture', scene_pass.outputs[1])
 
         # Configure post processing
-        filter_pass = lionrender.FilterPass('filter', 'shaders/fsq.frag')
+        filter_pass = lionrender.FilterPass(fragment_path='shaders/fsq.frag')
         filter_pass.node_path.set_shader_input('render', light_pass.output)
 
         # Enable FXAA
-        fxaa_pass = lionrender.FxaaFilterPass('fxaa')
+        fxaa_pass = lionrender.FxaaFilterPass()
         fxaa_pass.node_path.set_shader_input('inputTexture', filter_pass.output)
 
         # Output result
