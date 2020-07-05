@@ -1,6 +1,6 @@
 #version 330
 
-uniform sampler2D render;
+uniform sampler2D inputTexture;
 
 in vec2 texcoord;
 out vec4 out_data;

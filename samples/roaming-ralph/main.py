@@ -55,41 +55,26 @@ class RoamingRalphDemo(ShowBase):
         # Set up the window, camera, etc.
         ShowBase.__init__(self)
 
+        base.render.setAttrib(LightRampAttrib.makeHdr0())
+
         # Configure depth pre-pass
-        prepass_pass = lionrender.DepthScenePass(
-            shader=Shader.load(Shader.SL_GLSL, 'shaders/model.vert', 'shaders/null.frag'),
-        )
+        prepass_pass = lionrender.DepthScenePass()
 
         # Configure scene pass
         scene_fb_props = FrameBufferProperties()
         scene_fb_props.set_rgb_color(True)
-        scene_fb_props.set_aux_rgba(1)
         scene_fb_props.set_rgba_bits(8, 8, 8, 0)
         scene_fb_props.set_depth_bits(32)
         scene_pass = lionrender.ScenePass(
             frame_buffer_properties=scene_fb_props,
-            shader=Shader.load(Shader.SL_GLSL, 'shaders/model.vert', 'shaders/model.frag'),
             clear_color=LColor(0.53, 0.80, 0.92, 1),
             share_depth_with=prepass_pass
         )
         scene_pass.node_path.set_depth_write(False)
 
-        # Configure light pass
-        light_fb_props = FrameBufferProperties()
-        light_fb_props.set_rgb_color(True)
-        light_fb_props.set_float_color(True)
-        light_fb_props.set_rgba_bits(16, 16, 16, 0)
-        light_pass = lionrender.FilterPass(
-            camera=base.camera,
-            frame_buffer_properties=light_fb_props,
-            shader=Shader.load(Shader.SL_GLSL, 'shaders/light.vert', 'shaders/light.frag'),
-        )
-        light_pass.node_path.set_shader_input('albedo_texture', scene_pass.outputs[0])
-        light_pass.node_path.set_shader_input('normal_texture', scene_pass.outputs[1])
-
         # Configure post processing
         filter_pass = lionrender.FilterPass(fragment_path='shaders/fsq.frag')
-        filter_pass.node_path.set_shader_input('render', light_pass.output)
+        filter_pass.node_path.set_shader_input('inputTexture', scene_pass.output)
 
         # Enable FXAA
         fxaa_pass = lionrender.FxaaFilterPass()
