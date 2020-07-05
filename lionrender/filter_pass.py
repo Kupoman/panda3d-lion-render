@@ -17,13 +17,15 @@ class FilterPass(Pass):
             fragment_path=None,
             **pass_options
     ):
-        if not 'shader' in pass_options and fragment_path is None:
-            raise Exception('No fragment shader is specified with "shader" or "fragment_path" parameter')
+        if 'shader' not in pass_options and fragment_path is None:
+            raise Exception(
+                'No fragment shader is specified with "shader" or "fragment_path" parameter'
+            )
 
         filter_options = {
         }
 
-        if not 'shader' in pass_options:
+        if 'shader' not in pass_options:
             filter_options['shader'] = p3d.Shader.load(
                 p3d.Shader.SL_GLSL,
                 get_shader_path('fsq.vert'),
